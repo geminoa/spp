@@ -75,15 +75,18 @@ Common qemu command line:
   	-netdev tap,id=net0 \
   	-nographic -vnc :2
 
-To start spp_vm "qemu-ifup" script required, please copy docs/qemu-ifup to host /etc/qemu-ifup
+To start spp_vm "qemu-ifup" script required, please copy docs/qemu-ifup to host
+/etc/qemu-ifup
 
 Vhost interface is supported to communicate between guest and host:
 
 vhost interface
 ~~~~~~~~~~~~~~~
 
-  - spp should do a "sec x:add vhost y" before starting the VM. x: vnf number, y: vhost port id.
-  - Needs vhost argument for qemu:
+  * spp should do a "sec x:add vhost y" before starting the VM. x: vnf number,
+    y: vhost port id.
+
+  * Needs vhost argument for qemu:
 
 .. code-block:: console
 
@@ -103,6 +106,7 @@ vhost interface
       -device virtio-net-pci,netdev=net1 \
       -nographic -vnc :2
 
+
 Start spp_vm (Inside the VM)
 ----------------------------
 
@@ -115,6 +119,7 @@ Start spp_vm (Inside the VM)
   	-p 0x01 \
   	-n 1 \
   	-s 192.168.122.1:6666
+
 
 Test Setups
 ===========
@@ -194,52 +199,52 @@ Test Setup 2: Dual NFV
 Configuration for L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: console
-
-  spp > sec 0;patch 0 1
-  spp > sec 1;patch 1 0
-  spp > sec 0;forward
-  spp > sec 1;forward
-
-.. code-block:: none
-
-                                                                        __
-                         +--------------+          +--------------+       |
-                         |    spp_nfv   |          |    spp_nfv   |       |
-                         |              |          |              |       |
-                         +--------------+          +--------------+       |
-                            ^        :               ^         :          |
-                            |        |               |         |          |
-                            :        v               :         v          |
-    +----+----------+-------------------------------------------------+   |
-    |    | primary  |       ^        :               ^         :      |   |
-    |    +----------+       |        :               |         :      |   |
-    |                       :        :               :         :      |   |
-    |                       :        |               :         |      |   |  host
-    |                       :        v               :         v      |   |
-    |                  +--------------+            +--------------+   |   |
-    |                  |   phy port 0 |            |   phy port 1 |   |   |
-    +------------------+--------------+------------+--------------+---+ __|
-                              ^                           ^
-                              |                           |
-                              v                           v
+  .. code-block:: console
+  
+    spp > sec 0;patch 0 1
+    spp > sec 1;patch 1 0
+    spp > sec 0;forward
+    spp > sec 1;forward
+  
+  .. code-block:: none
+  
+                                                                          __
+                           +--------------+          +--------------+       |
+                           |    spp_nfv   |          |    spp_nfv   |       |
+                           |              |          |              |       |
+                           +--------------+          +--------------+       |
+                              ^        :               ^         :          |
+                              |        |               |         |          |
+                              :        v               :         v          |
+      +----+----------+-------------------------------------------------+   |
+      |    | primary  |       ^        :               ^         :      |   |
+      |    +----------+       |        :               |         :      |   |
+      |                       :        :               :         :      |   |
+      |                       :        |               :         |      |   |  host
+      |                       :        v               :         v      |   |
+      |                  +--------------+            +--------------+   |   |
+      |                  |   phy port 0 |            |   phy port 1 |   |   |
+      +------------------+--------------+------------+--------------+---+ __|
+                                ^                           ^
+                                |                           |
+                                v                           v
 
 
 Configuration for loopback
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: console
-
-  spp > sec 0;patch 0 0
-  spp > sec 1;patch 1 1
-  spp > sec 0;forward
-  spp > sec 1;forward
+  .. code-block:: console
+  
+    spp > sec 0;patch 0 0
+    spp > sec 1;patch 1 1
+    spp > sec 0;forward
+    spp > sec 1;forward
 
 
 Test Setup 3: Dual NFV with ring pmd
 ------------------------------------
 
-.. code-block:: none
+  .. code-block:: none
 
                                                                         __
                        +----------+      ring        +----------+         |
@@ -265,16 +270,16 @@ Test Setup 3: Dual NFV with ring pmd
 Configuration for Uni directional L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: console
-
-  spp > sec 0;add ring 0
-  spp > sec 1;add ring 0
-  spp > sec 0;patch 0 2
-  spp > sec 1;patch 2 1
-  spp > sec 0;forward
-  spp > sec 1;forward
-
-.. code-block:: none
+  .. code-block:: console
+  
+    spp > sec 0;add ring 0
+    spp > sec 1;add ring 0
+    spp > sec 0;patch 0 2
+    spp > sec 1;patch 2 1
+    spp > sec 0;forward
+    spp > sec 1;forward
+  
+  .. code-block:: none
 
                                                                         __
                                          ring                             |
@@ -303,24 +308,24 @@ Configuration for Uni directional L2fwd
 Configuration for L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: console
-
-  spp > sec 0;add ring 0
-  spp > sec 0;add ring 1
-  spp > sec 1;add ring 0
-  spp > sec 1;add ring 1
-  spp > sec 0;patch 0 2
-  spp > sec 0;patch 3 0
-  spp > sec 1;patch 1 3
-  spp > sec 1;patch 2 1
-  spp > sec 0;forward
-  spp > sec 1;forward
+  .. code-block:: console
+  
+    spp > sec 0;add ring 0
+    spp > sec 0;add ring 1
+    spp > sec 1;add ring 0
+    spp > sec 1;add ring 1
+    spp > sec 0;patch 0 2
+    spp > sec 0;patch 3 0
+    spp > sec 1;patch 1 3
+    spp > sec 1;patch 2 1
+    spp > sec 0;forward
+    spp > sec 1;forward
 
 
 Test Setup 4: Single NFV with VM through vhost pmd
 --------------------------------------------------
 
-.. code-block:: none
+  .. code-block:: none
 
                                                    __
                           +----------------------+   |
@@ -356,25 +361,27 @@ Test Setup 4: Single NFV with VM through vhost pmd
                               :                           v
 
 
-Legend:-
-sec 0 = spp_nfv
-sec 1 = spp_vm
+  Legend:-
+
+  * sec 0 = spp_nfv
+
+  * sec 1 = spp_vm
 
 
 Configuration for Uni directional L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: console
+  .. code-block:: console
 
-  [rm –rf /tmp/sock0]
-  spp > sec 0;add vhost 0
+    [rm –rf /tmp/sock0]
+    spp > sec 0;add vhost 0
 
-  [start VM]
-  spp > sec 0;patch 0 2
-  spp > sec 0;patch 2 1
-  spp > sec 1;patch 0 0
-  spp > sec 1;forward
-  spp > sec 0;forward
+    [start VM]
+    spp > sec 0;patch 0 2
+    spp > sec 0;patch 2 1
+    spp > sec 1;patch 0 0
+    spp > sec 1;forward
+    spp > sec 0;forward
 
 
 
@@ -383,36 +390,36 @@ Optimizing qemu performance
 
 First find out the PID for qemu-system-x86 process
 
-.. code-block:: console
+  .. code-block:: console
 
-  ps ea
-     PID TTY      STAT   TIME COMMAND
-  192606 pts/11   Sl+    4:42 ./x86_64-softmmu/qemu-system-x86_64 -cpu host -enable-kvm -object memory-backend-file,id=mem,siz
+    ps ea
+       PID TTY      STAT   TIME COMMAND
+    192606 pts/11   Sl+    4:42 ./x86_64-softmmu/qemu-system-x86_64 -cpu host -enable-kvm -object memory-backend-file,id=mem,siz
 
 Using pstree to list out qemu-system-x86_64 threads:-
 
-.. code-block:: console
-
-  pstree -p 192606
-  qemu-system-x86(192606)--+--{qemu-system-x8}(192607)
-                           |--{qemu-system-x8}(192623)
-                           |--{qemu-system-x8}(192624)
-                           |--{qemu-system-x8}(192625)
-                           |--{qemu-system-x8}(192626)
+  .. code-block:: console
+  
+    pstree -p 192606
+    qemu-system-x86(192606)--+--{qemu-system-x8}(192607)
+                             |--{qemu-system-x8}(192623)
+                             |--{qemu-system-x8}(192624)
+                             |--{qemu-system-x8}(192625)
+                             |--{qemu-system-x8}(192626)
 
 To Optimize, use taskset to pin each thread:-
 
-.. code-block:: console
-
-  $ sudo taskset -pc 4 192623
-  pid 192623's current affinity list: 0-31
-  pid 192623's new affinity list: 4
-  $ sudo taskset -pc 5 192624
-  pid 192624's current affinity list: 0-31
-  pid 192624's new affinity list: 5
-  $ sudo taskset -pc 6 192625
-  pid 192625's current affinity list: 0-31
-  pid 192625's new affinity list: 6
-  $ sudo taskset -pc 7 192626
-  pid 192626's current affinity list: 0-31
-  pid 192626's new affinity list: 7
+  .. code-block:: console
+  
+    $ sudo taskset -pc 4 192623
+    pid 192623's current affinity list: 0-31
+    pid 192623's new affinity list: 4
+    $ sudo taskset -pc 5 192624
+    pid 192624's current affinity list: 0-31
+    pid 192624's new affinity list: 5
+    $ sudo taskset -pc 6 192625
+    pid 192625's current affinity list: 0-31
+    pid 192625's new affinity list: 6
+    $ sudo taskset -pc 7 192626
+    pid 192626's current affinity list: 0-31
+    pid 192626's new affinity list: 7
