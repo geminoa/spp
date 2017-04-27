@@ -3,6 +3,7 @@ Sample usage of the application
 
 Compilation
 -----------
+
 Change to DPDK directory
 Set RTE_SDK variable to current folder
 Set RTE_TARGET variable to any valid target.
@@ -13,12 +14,17 @@ Compile SPP: "make"
 
 Start Controller
 ----------------
-python spp.py -p 5555 -s 6666
+
+.. code-block:: console
+
+  python spp.py -p 5555 -s 6666
+
 
 Start spp_primary
 -----------------
 
 .. code-block:: console
+  
   sudo ./src/primary/src/primary/x86_64-native-linuxapp-gcc/spp_primary \
   	-c 0x02 -n 4 \
   	--socket-mem 512,512 \
@@ -33,6 +39,7 @@ Start spp_nfv
 -------------
 
 .. code-block:: console
+
   sudo ./src/nfv/src/nfv/x86_64-native-linuxapp-gcc/spp_nfv \
   	-c 0x06 -n 4 \
   	--proc-type=secondary \
@@ -41,6 +48,7 @@ Start spp_nfv
   	-s 192.168.122.1:6666
 
 .. code-block:: console
+
   sudo ./src/nfv/src/nfv/x86_64-native-linuxapp-gcc/spp_nfv \
   	-c 0x0A -n 4 \
   	--proc-type=secondary \
@@ -53,6 +61,7 @@ Start VM (QEMU)
 Common qemu command line:
 
 .. code-block:: console
+
   sudo ./x86_64-softmmu/qemu-system-x86_64 \
   	-cpu host \
   	-enable-kvm \
@@ -71,11 +80,13 @@ To start spp_vm "qemu-ifup" script required, please copy docs/qemu-ifup to host 
 Vhost interface is supported to communicate between guest and host:
 
 vhost interface
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+
   - spp should do a "sec x:add vhost y" before starting the VM. x: vnf number, y: vhost port id.
   - Needs vhost argument for qemu:
 
 .. code-block:: console
+
     sudo ./x86_64-softmmu/qemu-system-x86_64 \
       -cpu host \
       -enable-kvm \
@@ -96,6 +107,7 @@ Start spp_vm (Inside the VM)
 ----------------------------
 
 .. code-block:: console
+
   sudo ./src/vm/src/vm/x86_64-native-linuxapp-gcc/spp_vm \
   	-c 0x03 -n 4 \
   	--proc-type=primary \
@@ -109,6 +121,8 @@ Test Setups
 
 Test Setup 1: Single NFV
 ------------------------
+
+.. code-block:: none
 
                                                                         __
                                     +--------------+                      |
@@ -134,8 +148,8 @@ Test Setup 1: Single NFV
 Configuration for L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-
 .. code-block:: console
+
   spp > sec 0;patch 0 1
   spp > sec 0;patch 1 0
   spp > sec 0;forward
@@ -144,6 +158,7 @@ Configuration for loopback
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
+
   spp > sec 0;patch 0 0
   spp > sec 0;patch 1 1
   spp > sec 0;forward
@@ -151,6 +166,8 @@ Configuration for loopback
 
 Test Setup 2: Dual NFV
 ----------------------
+
+.. code-block:: none
 
                                                                         __
                          +--------------+          +--------------+       |
@@ -173,15 +190,18 @@ Test Setup 2: Dual NFV
                               |                           |
                               :                           v
 
+
 Configuration for L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
+
   spp > sec 0;patch 0 1
   spp > sec 1;patch 1 0
   spp > sec 0;forward
   spp > sec 1;forward
 
+.. code-block:: none
 
                                                                         __
                          +--------------+          +--------------+       |
@@ -204,10 +224,12 @@ Configuration for L2fwd
                               |                           |
                               v                           v
 
+
 Configuration for loopback
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
+
   spp > sec 0;patch 0 0
   spp > sec 1;patch 1 1
   spp > sec 0;forward
@@ -216,6 +238,8 @@ Configuration for loopback
 
 Test Setup 3: Dual NFV with ring pmd
 ------------------------------------
+
+.. code-block:: none
 
                                                                         __
                        +----------+      ring        +----------+         |
@@ -242,6 +266,7 @@ Configuration for Uni directional L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
+
   spp > sec 0;add ring 0
   spp > sec 1;add ring 0
   spp > sec 0;patch 0 2
@@ -249,6 +274,7 @@ Configuration for Uni directional L2fwd
   spp > sec 0;forward
   spp > sec 1;forward
 
+.. code-block:: none
 
                                                                         __
                                          ring                             |
@@ -278,6 +304,7 @@ Configuration for L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
+
   spp > sec 0;add ring 0
   spp > sec 0;add ring 1
   spp > sec 1;add ring 0
@@ -292,6 +319,8 @@ Configuration for L2fwd
 
 Test Setup 4: Single NFV with VM through vhost pmd
 --------------------------------------------------
+
+.. code-block:: none
 
                                                    __
                           +----------------------+   |
@@ -326,6 +355,7 @@ Test Setup 4: Single NFV with VM through vhost pmd
                               |                           |
                               :                           v
 
+
 Legend:-
 sec 0 = spp_nfv
 sec 1 = spp_vm
@@ -335,6 +365,7 @@ Configuration for Uni directional L2fwd
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: console
+
   [rm –rf /tmp/sock0]
   spp > sec 0;add vhost 0
 
@@ -349,9 +380,11 @@ Configuration for Uni directional L2fwd
 
 Optimizing qemu performance
 ---------------------------
+
 First find out the PID for qemu-system-x86 process
 
 .. code-block:: console
+
   ps ea
      PID TTY      STAT   TIME COMMAND
   192606 pts/11   Sl+    4:42 ./x86_64-softmmu/qemu-system-x86_64 -cpu host -enable-kvm -object memory-backend-file,id=mem,siz
@@ -359,6 +392,7 @@ First find out the PID for qemu-system-x86 process
 Using pstree to list out qemu-system-x86_64 threads:-
 
 .. code-block:: console
+
   pstree -p 192606
   qemu-system-x86(192606)--+--{qemu-system-x8}(192607)
                            |--{qemu-system-x8}(192623)
@@ -369,6 +403,7 @@ Using pstree to list out qemu-system-x86_64 threads:-
 To Optimize, use taskset to pin each thread:-
 
 .. code-block:: console
+
   $ sudo taskset -pc 4 192623
   pid 192623's current affinity list: 0-31
   pid 192623's new affinity list: 4
